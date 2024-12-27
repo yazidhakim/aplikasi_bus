@@ -1,48 +1,56 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
-import java.sql.SQLException;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-/**
- * @author Nitro 5
- */
+import java.sql.SQLException;
+
 public class User extends Model<User> {
-    private String userID;
+    private int userID;
     private String username;
     private String email;
     private String password;
-    private Role role;
-    
-    public enum Role {
-        ADMIN, CUSTOMER
-    }
+
     public User() {
-        this.table = "user";  // Nama tabel di database
-        this.primaryKey = "userID";  // Nama primary key
+        this.table = "user";
+        this.primaryKey = "userID";
     }
-     public String getUserID() {
+
+    public User(int userID, String username, String email, String password) {
+        this.table = "user";
+        this.primaryKey = "userID";
+        this.userID = userID;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    // Getters and Setters
+    public int getUserID() {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(int userID) {
         this.userID = userID;
     }
-     public String getUsername() {
+
+    public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
-     public String getEmail() {
+
+    public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getPassword() {
         return password;
     }
@@ -50,28 +58,56 @@ public class User extends Model<User> {
     public void setPassword(String password) {
         this.password = password;
     }
-    public Role getRole() {
-        return role;
-    }
 
-    public void setRole(String role) {
-        this.role = Role.valueOf(role.toUpperCase()); // Pastikan role yang diterima valid (ADMIN atau CUSTOMER)
+    
+    @Override
+    public void insert() {
+    try {
+        // Memuat driver JDBC
+        Class.forName("com.mysql.cj.jdbc.Driver"); // Untuk MySQL Connector/J 8.x
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/aplikasi_bus", "root", "")) {
+            String sql = "INSERT INTO user (userID, username, email, password) VALUES (?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, this.userID); // Pastikan userID sudah diisi
+            stmt.setString(2, this.username);
+            stmt.setString(3, this.email);
+            stmt.setString(4, this.password);
+            stmt.executeUpdate();
+            System.out.println("User  inserted successfully");
+        }
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+        System.out.println("Driver tidak ditemukan.");
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
-    public boolean validate(){
-        return true;
-    }
+}
     @Override
     public User toModel(ResultSet rs) {
-        User user = new User();
         try {
-            user.setUserID(rs.getString("userID"));
-            user.setUsername(rs.getString("username"));
-            user.setEmail(rs.getString("email"));
-            user.setPassword(rs.getString("password"));
-            user.setRole(rs.getString("role"));
-        } catch (Exception e) {
+            return new User(
+                rs.getInt("userID"),
+                rs.getString("username"),
+                rs.getString("email"),
+                rs.getString("password")
+            );
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user;
+        return null;
+    }
+
+    public boolean validate() {
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/aplikasi_bus", "root", "")) {
+            String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, this.username);
+            stmt.setString(2, this.password);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

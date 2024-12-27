@@ -1,17 +1,11 @@
-<%-- 
-    Document   : signup
-    Created on : 25 Dec 2024, 12.45.16
-    Author     : Nitro 5
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="models.User"%>"
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="models.User" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>SignUp</title>
-        <style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Sign Up</title>
+    <style>
         body {
             font-family: Poppins, sans-serif;
             background-color: #f4f4f9;
@@ -41,7 +35,7 @@
             display: block;
             margin-bottom: 5px;
         }
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -72,27 +66,46 @@
         .register-link a:hover {
             text-decoration: underline;
         }
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
     </style>
-    </head>
-    <body>
-        <h1>Signup</h1>
-    <form action="<%= request.getContextPath() %>/users" method="POST">
-        <input type="hidden" name="action" value="signup">
-        <div class="form-group">
-            <input type="text" name="username" placeholder="Username" required>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Sign Up</h2>
+        <% 
+        String message = (String) session.getAttribute("msg");
+        if (message != null) {
+        %>
+            <p class="error"><%= message %></p>
+            <% session.removeAttribute("msg"); %>
+        <% } %>
+        <form action="<%= request.getContextPath() %>/users" method="POST">
+            <input type="hidden" name="action" value="signup">
+            <div class="form-group">
+                <label for="userID">User ID:</label>
+                <input type="text" id="userID" name="userID" placeholder="User ID">
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="button">Sign Up</button>
+        </form>
+        <div class="register-link">
+            <p>Already have an account? <a href="users?auth=login">Login here</a></p>
         </div>
-        <div class="form-group">
-        <input type="email" name="email" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-        <input type="password" name="password" placeholder="Password" required>
-        </div>
-        <select name="role">
-            <option value="customer">Customer</option>
-            <option value="admin">Admin</option>
-        </select>
-        <button type="submit">Sign Up</button>
-    </form>
-    <p>Already have an account? <a href="users?auth=login">Login here</a></p>
+    </div>
 </body>
 </html>

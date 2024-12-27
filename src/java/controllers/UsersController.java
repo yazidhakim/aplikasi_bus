@@ -1,47 +1,45 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import models.User;
 import javax.servlet.http.HttpSession;
+import models.User;
 
-/**
- *
- * @author Nitro 5
- */
 @WebServlet(name = "UsersController", urlPatterns = {"/users"})
 public class UsersController extends HttpServlet {
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String auth = request.getParameter("auth");
-        if(auth == null){
-            request.setAttribute("title","registrasi");
+
+        if (auth == null) {
+            request.setAttribute("title", "Register");
             request.getRequestDispatcher("users/signup.jsp").forward(request, response);
-        }else if("login".equals(auth)){
-            request.setAttribute("title", "login");
+        } else if ("login".equals(auth)) {
+            request.setAttribute("title", "Login");
             request.getRequestDispatcher("users/login.jsp").forward(request, response);
-        }else if ("logout".equals(auth)) {
-            // Perform logout
+        } else if ("logout".equals(auth)) {
             HttpSession session = request.getSession();
             session.invalidate();
             response.sendRedirect("users?auth=login");
-        }else if ("view_customer".equals(auth)) {
-            // View customer dashboard
-            request.setAttribute("title", "Customer Dashboard");
-            request.getRequestDispatcher("users/view_customer.jsp").forward(request, response);
+        } else if ("view_customer".equals(auth)) {
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+
+            if (user == null) {
+                response.sendRedirect("users?auth=login");
+            } else {
+                request.setAttribute("title", "Customer Dashboard");
+                request.setAttribute("user", user);
+                request.getRequestDispatcher("users/view_customer.jsp").forward(request, response);
+            }
         } else {
-            // Default case: Redirect to registration
-            response.sendRedirect("users");
+            response.sendRedirect("users?auth=login");
         }
     }
 
@@ -49,41 +47,60 @@ public class UsersController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        
-        if("login".equals(action)){
+        System.out.println("Action: " + action);
+        if ("login".equals(action)) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+
             User user = new User();
-            user.setUsername(request.getParameter("username"));
-            user.setPassword(request.getParameter("password"));
-            boolean isValid = user.validate(); 
-            
-            if(isValid){
+            user.setUsername(username);
+            user.setPassword(password);
+
+            if (user.validate()) {
                 HttpSession session = request.getSession();
-                session.setAttribute("user", user);  // Set user ke session
-                response.sendRedirect("users?auth=view_customer"); 
-                return;
+                session.setAttribute("user", user);
+                response.sendRedirect("users?auth=view_customer"); // Redirect ke view_customer.jsp
             } else {
                 request.getSession().setAttribute("msg", "Login failed! Check your username or password.");
                 response.sendRedirect("users?auth=login");
             }
-        } else {  // Sign up action
-            String username = request.getParameter("username");
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            String role = request.getParameter("role");  // Mendapatkan role dari form
-            
-            // Membuat objek User dan menyetel parameter
-            User user = new User();
-            user.setUsername(username);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setRole(role);
-            
-            // Menyimpan data user baru
-            user.insert();
-            
-            // Menampilkan pesan sukses dan mengarahkan ke halaman login
-            request.getSession().setAttribute("msg", "Signup successful!");
-            response.sendRedirect("users?auth=login");  // Mengarahkan ke halaman login setelah signup
+
+        } else if ("signup".equals(action)) {
+            System.out.println("Processing signup request"); 
+            String userIDParam = request.getParameter("userID");
+            if (userIDParam == null || userIDParam.isEmpty()) {
+                request.getSession().setAttribute("msg", "User ID is required.");
+                response.sendRedirect("users?auth=signup");
+                return;
+            }
+            try {
+                int userID = Integer.parseInt(userIDParam);
+                String username = request.getParameter("username");
+                String email = request.getParameter("email");
+                String password = request.getParameter("password");
+
+                if (username == null || username.isEmpty() || email == null || email.isEmpty() || password == null || password.isEmpty()) {
+                    request.getSession().setAttribute("msg", "All fields are required.");
+                    response.sendRedirect("users?auth=signup");
+                    return;
+                }
+
+                User user = new User();
+                user.setUserID(userID);
+                user.setUsername(username);
+                user.setEmail(email);
+                user.setPassword(password);
+                
+                user.insert(); // Simpan user baru
+                System.out.println("Before redirect to: users?auth=login");
+                response.sendRedirect("users?auth=login");
+                System.out.println("After redirect (will not be shown if redirect works).");
+                //request.getSession().setAttribute("msg", "Signup successful!");
+                //response.sendRedirect("users?auth=login");
+            } catch (NumberFormatException e) {
+                request.getSession().setAttribute("msg", "Invalid User ID.");
+                response.sendRedirect("users?auth=signup");
+            }
         }
     }
 }
