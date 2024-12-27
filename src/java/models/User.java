@@ -98,6 +98,8 @@ public class User extends Model<User> {
     }
 
     public boolean validate() {
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver"); // Explicitly load the MySQL driver
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3307/aplikasi_bus", "root", "")) {
             String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -105,9 +107,14 @@ public class User extends Model<User> {
             stmt.setString(2, this.password);
             ResultSet rs = stmt.executeQuery();
             return rs.next();
-        } catch (SQLException e) {
+        }
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL driver not found.");
             e.printStackTrace();
             return false;
-        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+  }
 }

@@ -8,40 +8,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import models.User;
+import javax.servlet.RequestDispatcher;
+ 
 
 @WebServlet(name = "UsersController", urlPatterns = {"/users"})
 public class UsersController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String auth = request.getParameter("auth");
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String auth = request.getParameter("auth");
 
-        if (auth == null) {
-            request.setAttribute("title", "Register");
-            request.getRequestDispatcher("users/signup.jsp").forward(request, response);
-        } else if ("login".equals(auth)) {
-            request.setAttribute("title", "Login");
-            request.getRequestDispatcher("users/login.jsp").forward(request, response);
-        } else if ("logout".equals(auth)) {
-            HttpSession session = request.getSession();
-            session.invalidate();
-            response.sendRedirect("users?auth=login");
-        } else if ("view_customer".equals(auth)) {
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
-
-            if (user == null) {
-                response.sendRedirect("users?auth=login");
-            } else {
-                request.setAttribute("title", "Customer Dashboard");
-                request.setAttribute("user", user);
-                request.getRequestDispatcher("users/view_customer.jsp").forward(request, response);
-            }
-        } else {
-            response.sendRedirect("users?auth=login");
-        }
+    if ("signup".equals(auth)) {
+        // Redirect ke halaman signup.jsp
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/users/signup.jsp");
+        dispatcher.forward(request, response);
+    } else if ("view_customer".equals(auth)) {
+        // Halaman untuk pengguna yang login
+        RequestDispatcher dispatcher = request.getRequestDispatcher("users/view_customer.jsp");
+        dispatcher.forward(request, response);
+    } else if ("logout".equals(auth)) {
+    HttpSession session = request.getSession();
+    session.invalidate();
+    response.sendRedirect("users?auth=login");
+    } else {
+        // Default ke halaman login
+        RequestDispatcher dispatcher = request.getRequestDispatcher("users/login.jsp");
+        dispatcher.forward(request, response);
     }
+}
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

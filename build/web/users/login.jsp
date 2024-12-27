@@ -104,7 +104,7 @@
                 <button type="submit" class="button">Login</button>
             </form>
             <div class="register-link">
-                <p>Don't have an account? <a href="users?auth=signup">Register here</a></p>
+                 <p>Don't have an account? <a href="<%= request.getContextPath() %>/users?auth=signup">Register here</a></p>
             </div>
         </div>
     </body>
