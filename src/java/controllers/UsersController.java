@@ -61,15 +61,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             }
 
         } else if ("signup".equals(action)) {
-            System.out.println("Processing signup request"); 
-            String userIDParam = request.getParameter("userID");
-            if (userIDParam == null || userIDParam.isEmpty()) {
-                request.getSession().setAttribute("msg", "User ID is required.");
-                response.sendRedirect("users?auth=signup");
-                return;
-            }
             try {
-                int userID = Integer.parseInt(userIDParam);
                 String username = request.getParameter("username");
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
@@ -81,7 +73,6 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
                 }
 
                 User user = new User();
-                user.setUserID(userID);
                 user.setUsername(username);
                 user.setEmail(email);
                 user.setPassword(password);

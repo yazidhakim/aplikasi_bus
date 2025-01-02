@@ -11,23 +11,23 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import models.Jadwal;
 
 /**
  *
  * @author Nitro 5
  */
-@WebServlet(name = "JadwalController", urlPatterns = {"/jadwal"})
-public class JadwalController extends HttpServlet {
+@WebServlet(name = "BusController", urlPatterns = {"/bus"})
+public class BusController extends HttpServlet {
 
-    private Jadwal jadwal= new Jadwal();
-
-    public List<Jadwal> getJadwalByRuteID(int ruteID) {
-        return jadwal.getByRouteID(ruteID);
-    }
-}
-
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -36,10 +36,10 @@ public class JadwalController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet JadwalController</title>");
+            out.println("<title>Servlet BusController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet JadwalController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet BusController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }

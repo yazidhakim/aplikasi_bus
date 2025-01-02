@@ -86,10 +86,6 @@
         <form action="<%= request.getContextPath() %>/users" method="POST">
             <input type="hidden" name="action" value="signup">
             <div class="form-group">
-                <label for="userID">User ID:</label>
-                <input type="text" id="userID" name="userID" placeholder="User ID">
-            </div>
-            <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" placeholder="Username" required>
             </div>
