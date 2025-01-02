@@ -259,37 +259,37 @@
         <a href="routes?action=view_bookings" class="button">Cek Pesanan</a>
     </div>
     <div class="booking-section">
-        <form class="booking-form">
+        <form class="booking-form" method="get" action="jadwal">
             <div class="form-group">
                 <label for="services">Services</label>
-                <select id="services">
+                <select id="services" name="services">
                     <option value="all">All Services</option>
                     <option value="Regular">Regular</option>
                     <option value="Executive">Executive</option>
                 </select>
             </div>
-
+        
             <div class="form-group">
                 <label for="total-passengers">Total Passengers*</label>
-                <input type="number" id="total-passengers" value="1" min="1">
+                <input type="number" id="total-passengers" name="total-passengers" value="1" min="1">
             </div>
             <div class="form-group">
                 <label for="from">From</label>
-                <input type="text" id="from" placeholder="Enter departure location" oninput="filterCities('from', 'from-suggestions')">
-                <div id="from-suggestions" class="suggestions"></div> <!-- Daftar saran -->
+                <input type="text" id="from" name="from" placeholder="Enter departure location" oninput="filterCities('from', 'from-suggestions')">
+                <div id="from-suggestions" class="suggestions"></div> 
             </div>
-
+        
             <div class="form-group">
                 <label for="to">To</label>
-                <input type="text" id="to" placeholder="Enter destination" oninput="filterCities('to', 'to-suggestions')">
-                <div id="to-suggestions" class="suggestions"></div> <!-- Daftar saran -->
+                <input type="text" id="to" name="to" placeholder="Enter destination" oninput="filterCities('to', 'to-suggestions')">
+                <div id="to-suggestions" class="suggestions"></div> 
             </div>
             <div class="form-group">
                 <label for="departure-date">Departure Date</label>
-                <input type="date" id="departure-date">
+                <input type="date" id="departure-date" name="departure-date">
             </div>
             <button type="submit" class="search-button">Search</button>
-        </form>
+        </form>        
     </div>
 
     <!-- Footer -->

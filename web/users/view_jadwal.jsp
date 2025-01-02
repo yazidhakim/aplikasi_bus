@@ -126,7 +126,7 @@
 
     <div class="container">
         <div class="booking-header">
-            <div>Balikpapan - Samarinda</div>
+            <div>${from} - ${to}</div> <!-- Tampilkan rute dari dan ke -->
             <div class="steps">
                 <span class="step active">1. Book</span>
                 <span class="step">2. Review</span>
@@ -137,45 +137,17 @@
 
         <div class="content">
             <div class="schedule">
-                <div class="schedule-item">
-                    <div class="details">
-                        <h4>Executive Shuttle</h4>
-                        <p class="bus-type">Executive Class</p>
-                        <p>04:00 - 06:25 (2h 25m)</p>
+                <c:forEach var="schedule" items="${schedules}">
+                    <div class="schedule-item">
+                        <div class="details">
+                            <h4>${schedule.bus_name}</h4>
+                            <p class="bus-type">${schedule.bus_type}</p>
+                            <p>${schedule.departure_time} - ${schedule.arrival_time} (${schedule.duration})</p>
+                        </div>
+                        <div class="price">Rp ${schedule.price}/seat</div>
+                        <button class="select-button">Select</button>
                     </div>
-                    <div class="price">Rp 230.000/seat</div>
-                    <button class="select-button">Select</button>
-                </div>
-
-                <div class="schedule-item">
-                    <div class="details">
-                        <h4>Standard Shuttle</h4>
-                        <p class="bus-type">Standard Class</p>
-                        <p>04:30 - 06:55 (2h 25m)</p>
-                    </div>
-                    <div class="price">Rp 180.000/seat</div>
-                    <button class="select-button">Select</button>
-                </div>
-
-                <div class="schedule-item">
-                    <div class="details">
-                        <h4>Executive Shuttle</h4>
-                        <p class="bus-type">Executive Class</p>
-                        <p>05:00 - 07:25 (2h 25m)</p>
-                    </div>
-                    <div class="price">Rp 230.000/seat</div>
-                    <button class="select-button">Select</button>
-                </div>
-
-                <div class="schedule-item">
-                    <div class="details">
-                        <h4>Standard Shuttle</h4>
-                        <p class="bus-type">Standard Class</p>
-                        <p>05:30 - 07:55 (2h 25m)</p>
-                    </div>
-                    <div class="price">Rp 180.000/seat</div>
-                    <button class="select-button">Select</button>
-                </div>
+                </c:forEach>
             </div>
         </div>
     </div>

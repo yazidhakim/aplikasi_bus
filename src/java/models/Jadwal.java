@@ -3,6 +3,7 @@ package models;
 import java.sql.ResultSet;
 import java.sql.Time;
 import java.sql.Date;
+import java.util.List;
 
 public class Jadwal extends Model<Jadwal> {
     private int jadwalID;          // Primary Key
@@ -103,4 +104,18 @@ public class Jadwal extends Model<Jadwal> {
     public void setHargaTiket(double harga_tiket) {
         this.harga_tiket = harga_tiket;
     }
+
+    public List<Jadwal> getByFilters(String from, String to, String date, String busType) {
+        String query = "SELECT j.jadwalID AS jadwal_id, j.waktu_keberangkatan, j.waktu_kedatangan, "
+                + "j.harga_tiket, j.seatReady, city_asal.name AS city_asal, city_tujuan.name AS city_tujuan, "
+                + "b.name AS bus_name, tipe_bus.tipe AS bus_type "
+                + "FROM jadwal j "
+                + "JOIN rute r ON j.ruteID = r.ruteID "
+                + "JOIN city AS city_asal ON city_asal.id = r.asal "
+                + "JOIN city AS city_tujuan ON city_tujuan.id = r.tujuan "
+                + "JOIN bus b ON j.busID = b.busID "
+                + "JOIN tipe_bus ON b.tipeID = tipe_bus.tipeID "
+                + "WHERE city_asal.name = ? AND city_tujuan.name = ? AND j.tanggal = ? AND tipe_bus.tipe = ?";
+    }
+    
 }

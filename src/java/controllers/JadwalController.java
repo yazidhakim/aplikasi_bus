@@ -26,6 +26,11 @@ public class JadwalController extends HttpServlet {
     public List<Jadwal> getJadwalByRuteID(int ruteID) {
         return jadwal.getByRouteID(ruteID);
     }
+
+    public List<Jadwal> getJadwalByFilters(String from, String to, String date, String busType) {
+        // Asumsi ada method dalam model Jadwal yang dapat menerima filter
+        return jadwal.getByFilters(from, to, date, busType);
+    }
 }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -57,7 +62,17 @@ public class JadwalController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String from = request.getParameter("from");
+        String to = request.getParameter("to");
+        String date = request.getParameter("departure-date");
+        String busType = request.getParameter("services");
+
+        // Ambil data jadwal sesuai dengan filter yang dipilih
+        List<Jadwal> schedules = getJadwalByFilters(from, to, date, busType);
+        
+        // Kirim data jadwal ke JSP untuk ditampilkan
+        request.setAttribute("schedules", schedules);
+        request.getRequestDispatcher("/users/view_jadwal.jsp").forward(request, response);
     }
 
     /**
@@ -81,7 +96,7 @@ public class JadwalController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "JadwalController handles bus schedule search functionality.";
     }// </editor-fold>
 
 }
