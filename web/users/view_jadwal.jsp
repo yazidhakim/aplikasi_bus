@@ -97,7 +97,15 @@
                         <p>Kota Asal: <%= schedule.getCityAsal() %></p>
                         <p>Kota Tujuan: <%= schedule.getCityTujuan() %></p>
                         <p>Harga Tiket: Rp <%= schedule.getHargaTiket() %> / seat</p>
-                        <button class="select-button" data-schedule-id="<%= schedule.getJadwalID() %>">Select</button>
+                        <button 
+                            class="select-button" 
+                            data-schedule-id="<%= schedule.getJadwalID() %>" 
+                            data-bus-name="<%= schedule.getBusName() %>" 
+                            data-departure-time="<%= schedule.getWaktuKeberangkatan() %>" 
+                            data-arrival-time="<%= schedule.getWaktuKedatangan() %>" 
+                            data-price="<%= schedule.getHargaTiket() %>">
+                            Select
+                        </button>
                     </div>
                 <%
                         }
@@ -115,8 +123,13 @@
         document.querySelectorAll('.select-button').forEach(button => {
             button.addEventListener('click', () => {
                 const scheduleId = button.getAttribute('data-schedule-id');
-                alert('You selected schedule ID: ' + scheduleId);
-                // Di sini Anda bisa menambahkan logika untuk melanjutkan ke langkah berikutnya
+                const busName = button.getAttribute('data-bus-name');
+                const departureTime = button.getAttribute('data-departure-time');
+                const arrivalTime = button.getAttribute('data-arrival-time');
+                const price = button.getAttribute('data-price');
+
+                // Arahkan ke view_transaksi.jsp dengan parameter jadwal
+                window.location.href = `view_transaksi.jsp?scheduleId=${scheduleId}&busName=${encodeURIComponent(busName)}&departureTime=${encodeURIComponent(departureTime)}&arrivalTime=${encodeURIComponent(arrivalTime)}&price=${price}`;
             });
         });
     </script>

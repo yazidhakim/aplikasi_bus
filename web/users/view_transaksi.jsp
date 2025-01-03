@@ -100,26 +100,26 @@
 <body>
     <div class="container">
         <!-- Informasi Shuttle -->
-        <div class="shuttle-title">Executive Shuttle</div>
+        <div class="shuttle-title"><%= busName %></div>
         <div class="shuttle-info">
-            <p>Balikpapan - Samarinda</p>
-            <p>04:00 - 06:25 (2h 25m)</p>
+            <p><%= departureTime %> - <%= arrivalTime %></p>
             <p>1 seat(s)</p>
-            <p>Price: Rp 230.000/seat</p>
+            <p>Price: Rp <%= price %>/seat</p>
         </div>
         <hr class="separator">
         
         <!-- Form Passenger Details -->
         <div>
             <h4>Passenger Details</h4>
-            <form>
+            <form action="process_transaction.jsp" method="POST">
+                <input type="hidden" name="scheduleId" value="<%= scheduleId %>">
                 <div class="form-group">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" placeholder="Enter your full name">
+                    <input type="text" id="name" name="name" placeholder="Enter your full name">
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input type="text" id="phone" placeholder="Enter your phone number">
+                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
                 </div>
                 <button type="submit" class="btn-next">Next</button>
             </form>
