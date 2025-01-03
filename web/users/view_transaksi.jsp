@@ -1,10 +1,29 @@
-<%-- 
-    Document   : view_transaksi
-    Created on : 31 Dec 2024, 13.08.28
-    Author     : Nitro 5
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    // Ambil data dari parameter URL
+    String userId = request.getParameter("userId");
+    String scheduleId = request.getParameter("scheduleId");
+    String busName = request.getParameter("busName");
+    String departureTime = request.getParameter("departureTime");
+    String arrivalTime = request.getParameter("arrivalTime");
+    String price = request.getParameter("price");
+%>
+
+<%@page import="models.User"%>
+<%
+    // Ambil objek user dari sesi
+    User user = (User) session.getAttribute("user");
+    if (user == null) {
+        response.sendRedirect("users?auth=login");
+        return;
+    }
+
+    // Ambil ID pengguna
+    int currentUserId = user.getUserID();
+    String userName = user.getUsername();
+    int phone = user.getPhoneNumber();
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,15 +130,22 @@
         <!-- Form Passenger Details -->
         <div>
             <h4>Passenger Details</h4>
-            <form action="process_transaction.jsp" method="POST">
+            <form action="pemesanan" method="GET">
+                <!-- Input tersembunyi untuk mengirim data -->
+                <input type="hidden" name="userId" value="<%= currentUserId %>">
                 <input type="hidden" name="scheduleId" value="<%= scheduleId %>">
+                <input type="hidden" name="busName" value="<%= busName %>">
+                <input type="hidden" name="departureTime" value="<%= departureTime %>">
+                <input type="hidden" name="arrivalTime" value="<%= arrivalTime %>">
+                <input type="hidden" name="price" value="<%= price %>">
+
                 <div class="form-group">
                     <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your full name">
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
                 </div>
                 <button type="submit" class="btn-next">Next</button>
             </form>
@@ -127,4 +153,3 @@
     </div>
 </body>
 </html>
-

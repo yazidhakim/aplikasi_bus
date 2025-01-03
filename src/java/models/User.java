@@ -11,19 +11,21 @@ public class User extends Model<User> {
     private String username;
     private String email;
     private String password;
+    private int phone_number;
 
     public User() {
         this.table = "user";
         this.primaryKey = "userID";
     }
 
-    public User(int userID, String username, String email, String password) {
+    public User(int userID, String username, String email, String password, int phone_number) {
         this.table = "user";
         this.primaryKey = "userID";
         this.userID = userID;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.phone_number =  phone_number;
     }
 
     // Getters and Setters
@@ -59,6 +61,14 @@ public class User extends Model<User> {
         this.password = password;
     }
 
+    public int getPhoneNumber() {
+        return phone_number;
+    }
+
+    public void setPhoneNumber(int phone_number) {
+        this.phone_number = phone_number;
+    }
+
     
     @Override
     public void insert() {
@@ -89,7 +99,8 @@ public class User extends Model<User> {
                 rs.getInt("userID"),
                 rs.getString("username"),
                 rs.getString("email"),
-                rs.getString("password")
+                rs.getString("password"),
+                rs.getInt("phone_number")
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,5 +127,5 @@ public class User extends Model<User> {
         e.printStackTrace();
         return false;
     }
-  }
+   }
 }

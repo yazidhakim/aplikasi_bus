@@ -106,6 +106,7 @@
                             data-price="<%= schedule.getHargaTiket() %>">
                             Select
                         </button>
+
                     </div>
                 <%
                         }
@@ -120,18 +121,20 @@
     </div>
 
     <script>
-        document.querySelectorAll('.select-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const scheduleId = button.getAttribute('data-schedule-id');
-                const busName = button.getAttribute('data-bus-name');
-                const departureTime = button.getAttribute('data-departure-time');
-                const arrivalTime = button.getAttribute('data-arrival-time');
-                const price = button.getAttribute('data-price');
+        document.querySelector(".select-button").addEventListener("click", function() {
+            const scheduleId = this.getAttribute('data-scheduleId');
+            const busName = this.getAttribute('data-busName');
+            const departureTime = this.getAttribute('data-departureTime');
+            const arrivalTime = this.getAttribute('data-arrivalTime');
+            const price = this.getAttribute('data-price');
 
-                // Arahkan ke view_transaksi.jsp dengan parameter jadwal
-                window.location.href = `view_transaksi.jsp?scheduleId=${scheduleId}&busName=${encodeURIComponent(busName)}&departureTime=${encodeURIComponent(departureTime)}&arrivalTime=${encodeURIComponent(arrivalTime)}&price=${price}`;
-            });
+            // Arahkan ke PemesananController dengan parameter yang diperlukan
+            window.location.href = "pemesanan?scheduleId=" + encodeURIComponent(scheduleId) + 
+                                   "&busName=" + encodeURIComponent(busName) + 
+                                   "&departureTime=" + encodeURIComponent(departureTime) + 
+                                   "&arrivalTime=" + encodeURIComponent(arrivalTime) + 
+                                   "&price=" + encodeURIComponent(price);
         });
-    </script>
+    </script>
 </body>
 </html>
