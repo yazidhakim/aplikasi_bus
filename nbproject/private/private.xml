@@ -4,13 +4,14 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/pembayaran/web/users/view_customer.jsp</file>
-            <file>file:/D:/pembayaran/web/route/rute.jsp</file>
             <file>file:/D:/pembayaran/web/homepage.jsp</file>
             <file>file:/D:/pembayaran/web/users/signup.jsp</file>
             <file>file:/D:/pembayaran/src/java/models/Model.java</file>
             <file>file:/D:/pembayaran/src/java/controllers/UsersController.java</file>
-            <file>file:/D:/pembayaran/web/users/login.jsp</file>
+            <file>file:/D:/pembayaran/src/java/models/Jadwal.java</file>
             <file>file:/D:/pembayaran/src/java/models/User.java</file>
+            <file>file:/D:/pembayaran/src/java/controllers/JadwalController.java</file>
+            <file>file:/D:/pembayaran/web/users/view_jadwal.jsp</file>
         </group>
     </open-files>
 </project-private>

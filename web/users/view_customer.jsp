@@ -93,6 +93,7 @@
             bottom: 0;
             width: 100%;
         }
+
         .booking-section {
             background-color: #fff;
             padding: 20px;
@@ -158,6 +159,7 @@
         .search-button:hover {
             background-color: #e0a800;
         }
+
         .suggestions {
             border: 1px solid #ccc;
             background: white;
@@ -168,27 +170,27 @@
             overflow-y: auto;
             display: none; /* Sembunyikan secara default */
         }
+
         .suggestion-item {
             padding: 10px;
             cursor: pointer;
         }
+
         .suggestion-item:hover {
             background-color: #f0f0f0;
         }
+
         .category {
             font-weight: bold;
             padding: 5px 10px;
             background-color: #f9f9f9;
         }
+
         /* Responsive Design */
         @media (max-width: 600px) {
             .booking-section {
                 margin: 10px;
                 padding: 15px;
-            }
-
-            .vehicle-images img {
-                max-width: 60px;
             }
 
             .search-button {
@@ -258,6 +260,7 @@
         <a href="routes?action=book_ticket" class="button">Pesan Tiket</a>
         <a href="routes?action=view_bookings" class="button">Cek Pesanan</a>
     </div>
+
     <div class="booking-section">
         <form class="booking-form" method="get" action="jadwal">
             <div class="form-group">
@@ -273,6 +276,7 @@
                 <label for="total-passengers">Total Passengers*</label>
                 <input type="number" id="total-passengers" name="total-passengers" value="1" min="1">
             </div>
+
             <div class="form-group">
                 <label for="from">From</label>
                 <input type="text" id="from" name="from" placeholder="Enter departure location" oninput="filterCities('from', 'from-suggestions')">
@@ -284,10 +288,12 @@
                 <input type="text" id="to" name="to" placeholder="Enter destination" oninput="filterCities('to', 'to-suggestions')">
                 <div id="to-suggestions" class="suggestions"></div> 
             </div>
+
             <div class="form-group">
                 <label for="departure-date">Departure Date</label>
                 <input type="date" id="departure-date" name="departure-date">
             </div>
+
             <button type="submit" class="search-button">Search</button>
         </form>        
     </div>

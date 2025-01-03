@@ -1,5 +1,18 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.util.List"%>
+<%@page import="models.Jadwal"%>
+<%@page import="models.User"%>
+<%
+    User user = (User) session.getAttribute("user");
+    if (user == null) {
+        response.sendRedirect("users?auth=login");
+        return;
+    }
 
-
+    List<Jadwal> schedules = (List<Jadwal>) request.getAttribute("schedules");
+    String from = (String) request.getAttribute("from");
+    String to = (String) request.getAttribute("to");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,31 +53,11 @@
             color: #ffffff;
         }
 
-        .steps {
-            display: flex;
-            gap: 15px;
-        }
-
-        .step {
-            color: #cfd8dc;
-        }
-
-        .step.active {
-            color: #ffffff;
-        }
-
         .content {
             padding: 20px;
         }
 
-        .schedule {
-            margin-bottom: 20px;
-        }
-
         .schedule-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             border: 1px solid #e0e0e0;
             padding: 15px;
             border-radius: 6px;
@@ -72,50 +65,10 @@
             background: #f9f9f9;
         }
 
-        .schedule-item:hover {
-            background: #e0f7fa;
-        }
-
-        .details {
-            flex: 1;
-        }
-
-        .details h4 {
-            margin: 0 0 5px;
-            font-size: 16px;
-            color: #003366;
-        }
-
-        .details p {
-            margin: 0;
-            font-size: 14px;
-            color: #757575;
-        }
-
-        .price {
-            font-size: 16px;
-            font-weight: 700;
-            color: #003366;
-        }
-
-        .select-button {
-            padding: 10px 20px;
-            background: #003366;
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .select-button:hover {
-            background: #00509e;
-        }
-
-        .bus-type {
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #4caf50;
+        .no-schedule {
+            text-align: center;
+            color: #ff0000;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -126,56 +79,34 @@
 
     <div class="container">
         <div class="booking-header">
-            <div>Balikpapan - Samarinda</div>
-            <div class="steps">
-                <span class="step active">1. Book</span>
-                <span class="step">2. Review</span>
-                <span class="step">3. Pay</span>
-                <span class="step">4. E-ticket</span>
-            </div>
+            <div><%= from %> - <%= to %></div> <!-- Tampilkan rute dari dan ke -->
         </div>
 
         <div class="content">
             <div class="schedule">
-                <div class="schedule-item">
-                    <div class="details">
-                        <h4>Executive Shuttle</h4>
-                        <p class="bus-type">Executive Class</p>
-                        <p>04:00 - 06:25 (2h 25m)</p>
+                <%
+                    if (schedules != null && !schedules.isEmpty()) {
+                        for (Jadwal schedule : schedules) {
+                %>
+                    <div class="schedule-item">
+                        <h4>Bus Name: <%= schedule.getBusName() %></h4>
+                        <p>Tipe Bus: <%= schedule.getBusType() %></p>
+                        <p>Waktu Keberangkatan: <%= schedule.getWaktuKeberangkatan() %></p>
+                        <p>Waktu Kedatangan: <%= schedule.getWaktuKedatangan() %></p>
+                        <p>Tanggal: <%= schedule.getTanggal() %></p>
+                        <p>Kota Asal: <%= schedule.getCityAsal() %></p>
+                        <p>Kota Tujuan: <%= schedule.getCityTujuan() %></p>
+                        <p>Harga Tiket: Rp <%= schedule.getHargaTiket() %> / seat</p>
+                        <button class="select-button" data-schedule-id="<%= schedule.getJadwalID() %>">Select</button>
                     </div>
-                    <div class="price">Rp 230.000/seat</div>
-                    <button class="select-button">Select</button>
-                </div>
-
-                <div class="schedule-item">
-                    <div class="details">
-                        <h4>Standard Shuttle</h4>
-                        <p class="bus-type">Standard Class</p>
-                        <p>04:30 - 06:55 (2h 25m)</p>
-                    </div>
-                    <div class="price">Rp 180.000/seat</div>
-                    <button class="select-button">Select</button>
-                </div>
-
-                <div class="schedule-item">
-                    <div class="details">
-                        <h4>Executive Shuttle</h4>
-                        <p class="bus-type">Executive Class</p>
-                        <p>05:00 - 07:25 (2h 25m)</p>
-                    </div>
-                    <div class="price">Rp 230.000/seat</div>
-                    <button class="select-button">Select</button>
-                </div>
-
-                <div class="schedule-item">
-                    <div class="details">
-                        <h4>Standard Shuttle</h4>
-                        <p class="bus-type">Standard Class</p>
-                        <p>05:30 - 07:55 (2h 25m)</p>
-                    </div>
-                    <div class="price">Rp 180.000/seat</div>
-                    <button class="select-button">Select</button>
-                </div>
+                <%
+                        }
+                    } else {
+                %>
+                    <p class="no-schedule">Tidak ada jadwal yang ditemukan untuk kriteria tersebut.</p>
+                <%
+                    }
+                %>
             </div>
         </div>
     </div>
@@ -183,7 +114,9 @@
     <script>
         document.querySelectorAll('.select-button').forEach(button => {
             button.addEventListener('click', () => {
-                alert('You selected this schedule!');
+                const scheduleId = button.getAttribute('data-schedule-id');
+                alert('You selected schedule ID: ' + scheduleId);
+                // Di sini Anda bisa menambahkan logika untuk melanjutkan ke langkah berikutnya
             });
         });
     </script>
