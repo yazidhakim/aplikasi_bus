@@ -97,7 +97,16 @@
                         <p>Kota Asal: <%= schedule.getCityAsal() %></p>
                         <p>Kota Tujuan: <%= schedule.getCityTujuan() %></p>
                         <p>Harga Tiket: Rp <%= schedule.getHargaTiket() %> / seat</p>
-                        <button class="select-button" data-schedule-id="<%= schedule.getJadwalID() %>">Select</button>
+                        <button 
+                            class="select-button" 
+                            data-schedule-id="<%= schedule.getJadwalID() %>" 
+                            data-bus-name="<%= schedule.getBusName() %>" 
+                            data-departure-time="<%= schedule.getWaktuKeberangkatan() %>" 
+                            data-arrival-time="<%= schedule.getWaktuKedatangan() %>" 
+                            data-price="<%= schedule.getHargaTiket() %>">
+                            Select
+                        </button>
+
                     </div>
                 <%
                         }
@@ -112,13 +121,20 @@
     </div>
 
     <script>
-        document.querySelectorAll('.select-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const scheduleId = button.getAttribute('data-schedule-id');
-                alert('You selected schedule ID: ' + scheduleId);
-                // Di sini Anda bisa menambahkan logika untuk melanjutkan ke langkah berikutnya
-            });
+        document.querySelector(".select-button").addEventListener("click", function() {
+            const scheduleId = this.getAttribute('data-scheduleId');
+            const busName = this.getAttribute('data-busName');
+            const departureTime = this.getAttribute('data-departureTime');
+            const arrivalTime = this.getAttribute('data-arrivalTime');
+            const price = this.getAttribute('data-price');
+
+            // Arahkan ke PemesananController dengan parameter yang diperlukan
+            window.location.href = "pemesanan?scheduleId=" + encodeURIComponent(scheduleId) + 
+                                   "&busName=" + encodeURIComponent(busName) + 
+                                   "&departureTime=" + encodeURIComponent(departureTime) + 
+                                   "&arrivalTime=" + encodeURIComponent(arrivalTime) + 
+                                   "&price=" + encodeURIComponent(price);
         });
-    </script>
+    </script>
 </body>
 </html>

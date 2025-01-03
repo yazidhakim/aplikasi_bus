@@ -54,7 +54,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             if (user.validate()) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                response.sendRedirect("users?auth=view_customer"); // Redirect ke view_customer.jsp
+                response.sendRedirect("users?auth=view_customer"); // Redirect to view_customer.jsp
             } else {
                 request.getSession().setAttribute("msg", "Login failed! Check your username or password.");
                 response.sendRedirect("users?auth=login");
@@ -65,26 +65,40 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
                 String username = request.getParameter("username");
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
+                String phoneNumberStr = request.getParameter("phone_number");
 
-                if (username == null || username.isEmpty() || email == null || email.isEmpty() || password == null || password.isEmpty()) {
+                // Check if required fields are empty
+                if (username == null || username.isEmpty() || email == null || email.isEmpty() || 
+                    password == null || password.isEmpty() || phoneNumberStr == null || phoneNumberStr.isEmpty()) {
                     request.getSession().setAttribute("msg", "All fields are required.");
                     response.sendRedirect("users?auth=signup");
                     return;
                 }
 
+                // Parse phone number from String to int
+                int phone_number = 0;
+                try {
+                    phone_number = Integer.parseInt(phoneNumberStr);
+                } catch (NumberFormatException e) {
+                    request.getSession().setAttribute("msg", "Invalid phone number format.");
+                    response.sendRedirect("users?auth=signup");
+                    return;
+                }
+
+                // Create a new User object and set properties
                 User user = new User();
                 user.setUsername(username);
                 user.setEmail(email);
                 user.setPassword(password);
-                
-                user.insert(); // Simpan user baru
+                user.setPhoneNumber(phone_number);  // Assuming you have a setter for phoneNumber
+
+                user.insert(); // Save the new user
                 System.out.println("Before redirect to: users?auth=login");
                 response.sendRedirect("users?auth=login");
                 System.out.println("After redirect (will not be shown if redirect works).");
-                //request.getSession().setAttribute("msg", "Signup successful!");
-                //response.sendRedirect("users?auth=login");
-            } catch (NumberFormatException e) {
-                request.getSession().setAttribute("msg", "Invalid User ID.");
+
+            } catch (Exception e) {
+                request.getSession().setAttribute("msg", "An error occurred. Please try again.");
                 response.sendRedirect("users?auth=signup");
             }
         }

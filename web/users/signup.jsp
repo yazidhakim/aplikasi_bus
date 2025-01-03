@@ -97,6 +97,10 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder="Password" required>
             </div>
+            <div class="form-group">
+                <label for="phone_number">Phone number:</label>
+                <input type="number" id="phone_number" name="phone_number" placeholder="phone number" required>
+            </div>
             <button type="submit" class="button">Sign Up</button>
         </form>
         <div class="register-link">
