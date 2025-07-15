@@ -27,7 +27,7 @@ Dalam pengembangannya, BussGo didesain dengan sistem dua peran utama: **Admin** 
 
 ## 🖥️ Teknologi yang Digunakan
 - **Backend:** Java (Servlet/JSP)
-- **Frontend:** HTML, CSS, JavaScript
+- **Frontend:** HTML, CSS
 - **Database:** MySQL
 - **Fitur Tambahan:** Auto-generate resi/tiket pembayaran
 
